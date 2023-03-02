@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch} from 'react-redux';
 
-import { addContact } from '../../../redux/contacts/contacts-slice';
-
-import { getAllContacts} from '../../../redux/contacts/contacts-selectors';
+import { fetchAllContacts, fetchAddContact } from "../../../redux/contacts/contacts-operations";
+// import { getAllContacts} from '../../../redux/contacts/contacts-selectors';
 
 import { nanoid } from 'nanoid';
 
@@ -11,31 +10,36 @@ import styles from './contactForm.module.css';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const allContacts = useSelector(getAllContacts);
-    
+      
   const [state, setState] = useState({ name: '', number: '' });
+
+  // const allContacts = useSelector(getAllContacts);
+
+  useEffect(()=> {
+    dispatch(fetchAllContacts())
+}, [dispatch])
 
   const handleChangeForm = ({ target }) => {
     const { name, value } = target;
     setState(prevState => ({ ...prevState, [name]: value }));
   };
   
-  const isDublicate = name => {
-    const normalizedName = name.toLowerCase();
-    const result = allContacts.find(({ name }) => {
-      return name.toLowerCase() === normalizedName;
-    });
+  // const isDublicate = name => {
+  //   const normalizedName = name.toLowerCase();
+  //   const result = allContacts.find(({ name }) => {
+  //     return name.toLowerCase() === normalizedName;
+  //   });
 
-    return Boolean(result);
-  };
+  //   return Boolean(result);
+  // };
 
   const handleAddContact = ({ name, number }) => {
-    if (isDublicate(name)) {
-        alert(`${name} is already in contacts`);
-        return false;
-    }
+    // if (isDublicate(name)) {
+    //     alert(`${name} is already in contacts`);
+    //     return false;
+    // }
 
-    dispatch(addContact({ name, number }));
+    dispatch(fetchAddContact({ name, number }));
 }
 
 const handleSubmit = e => {
