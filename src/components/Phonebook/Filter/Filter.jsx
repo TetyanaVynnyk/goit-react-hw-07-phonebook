@@ -29,6 +29,7 @@ const Filter = () => {
           required
           value={filter}
           onChange={handleFilter}
+          placeholder="enter the contact you want to find"
         />
       </label>
     </div>
